@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Movimiento {
+  id        String   @id @default(uuid())
+  concepto  String
+  tipo      String
+  monto     Float
+  fecha     DateTime
+  categoria String
+  deducible Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model ReservaFiscal {
+  id       String   @id @default(uuid())
+  cantidad Float
+  fecha    DateTime @default(now())
+}
