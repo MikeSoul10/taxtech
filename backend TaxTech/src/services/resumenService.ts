@@ -1,5 +1,5 @@
 import { prisma } from '../db'
-import { calcularISR } from './taxService'
+import { estimarImpuesto } from './taxService'
 import type { ResumenFinanciero } from '../types'
 
 export async function obtenerResumen(): Promise<ResumenFinanciero> {
@@ -21,13 +21,11 @@ export async function obtenerResumen(): Promise<ResumenFinanciero> {
     _sum: { cantidad: true },
   })
 
-  const baseGravable = ingresos - deducibles
-
   return {
     ingresos: Math.round(ingresos * 100) / 100,
     gastos: Math.round(gastos * 100) / 100,
     deducibles: Math.round(deducibles * 100) / 100,
-    impuestoEstimado: calcularISR(baseGravable),
+    impuestoEstimado: estimarImpuesto(ingresos, deducibles),
     reservaFiscal: reservas._sum.cantidad ?? 0,
   }
 }

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import StatCard from '../components/StatCard'
 import EstadoError from '../components/feedback/EstadoError'
 import EstadoVacio from '../components/feedback/EstadoVacio'
+import GraficoIngresosGastos from '../components/GraficoIngresosGastos'
 import { sincronizarCFDI } from '../api/taxtechApi'
 import { mensajeDeError } from '../api/client'
 import { formatearMoneda } from '../utils/format'
@@ -216,6 +217,20 @@ function Dashboard() {
             </section>
 
             <section className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+              <div className="card lg:col-span-2">
+                <div className="mb-4 flex items-center justify-between">
+                  <h3 className="text-lg font-bold text-slate-900">
+                    Ingresos vs gastos por mes
+                  </h3>
+
+                  <span className="text-xs font-medium uppercase tracking-wide text-slate-400">
+                    Gráfica del historial
+                  </span>
+                </div>
+
+                <GraficoIngresosGastos movimientos={movimientos.data ?? []} />
+              </div>
+
               <div className="card">
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="text-lg font-bold text-slate-900">
