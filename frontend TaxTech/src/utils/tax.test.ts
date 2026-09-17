@@ -3,8 +3,9 @@ import {
   calcularBaseGravable,
   calcularISR,
   estimarImpuesto,
+  obtenerTramo,
   topeDeducciones,
-} from './taxService'
+} from './tax'
 
 describe('calcularISR', () => {
   it('devuelve 0 si la base es 0 o negativa', () => {
@@ -19,7 +20,7 @@ describe('calcularISR', () => {
     expect(calcularISR(base)).toBe(esperado)
   })
 
-  it('suma coquota fija y excedente en un tramo medio', () => {
+  it('suma cuota fija y excedente en un tramo medio', () => {
     const base = 100_000
     const resultado = calcularISR(base)
     expect(resultado).toBeGreaterThan(4_462.13)
@@ -31,6 +32,19 @@ describe('calcularISR', () => {
     const esperado =
       1_416_150.26 + (base - 4_511_707.38) * 0.35
     expect(calcularISR(base)).toBeCloseTo(esperado, 1)
+  })
+})
+
+describe('obtenerTramo', () => {
+  it('resuelve el tramo correcto según la base', () => {
+    expect(obtenerTramo(1000)?.excedentePorCiento).toBe(1.92)
+    expect(obtenerTramo(100_000)?.excedentePorCiento).toBe(10.88)
+    expect(obtenerTramo(5_000_000)?.excedentePorCiento).toBe(35)
+  })
+
+  it('devuelve null sin base válida', () => {
+    expect(obtenerTramo(0)).toBeNull()
+    expect(obtenerTramo(Number.NaN)).toBeNull()
   })
 })
 

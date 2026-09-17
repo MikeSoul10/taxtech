@@ -1,8 +1,11 @@
+import { useState } from 'react'
 import EstadoError from '../components/feedback/EstadoError'
 import EstadoVacio from '../components/feedback/EstadoVacio'
+import Aviso from '../components/feedback/Aviso'
 import { mensajeDeError } from '../api/client'
-import { formatearMoneda } from '../utils/format'
+import { formatearFecha, formatearMoneda } from '../utils/format'
 import {
+  useActualizarMovimiento,
   useMovimientos,
   useResumenFinanciero,
 } from '../hooks/useFinanzas'
@@ -10,13 +13,37 @@ import {
 function Deducciones() {
   const movimientos = useMovimientos()
   const resumen = useResumenFinanciero()
+  const actualizarMovimiento = useActualizarMovimiento()
+
+  const [alternandoId, setAlternandoId] = useState<string | null>(null)
+  const [aviso, setAviso] = useState<{ tono: 'exito' | 'error'; mensaje: string } | null>(
+    null,
+  )
 
   const cargando = movimientos.isLoading || resumen.isLoading
   const error = movimientos.isError || resumen.isError
 
-  const deducibles = movimientos.data?.filter(
-    (movimiento) => movimiento.deducible,
+  const gastos = movimientos.data?.filter(
+    (movimiento) => movimiento.tipo === 'Gasto',
   )
+
+  const deducibles = gastos?.filter((movimiento) => movimiento.deducible)
+
+  async function alternarDeducible(id: string, deducible: boolean) {
+    setAlternandoId(id)
+    setAviso(null)
+
+    try {
+      await actualizarMovimiento.mutateAsync({
+        id,
+        datos: { deducible: !deducible },
+      })
+    } catch (e) {
+      setAviso({ tono: 'error', mensaje: mensajeDeError(e) })
+    } finally {
+      setAlternandoId(null)
+    }
+  }
 
   return (
     <div className="p-8">
@@ -29,8 +56,14 @@ function Deducciones() {
       </h2>
 
       <p className="mt-1 text-slate-500">
-        Gastos detectados como potencialmente deducibles.
+        Marca manualmente qué gastos son deducibles.
       </p>
+
+      {aviso && (
+        <div className="mt-6">
+          <Aviso tono={aviso.tono} mensaje={aviso.mensaje} />
+        </div>
+      )}
 
       <div className="card mt-8">
         <p className="text-sm text-slate-500">
@@ -42,6 +75,13 @@ function Deducciones() {
         ) : (
           <p className="mt-2 text-4xl font-bold text-emerald-600">
             {formatearMoneda(resumen.data?.deducibles ?? 0)}
+          </p>
+        )}
+
+        {resumen.data && (
+          <p className="mt-1 text-xs text-slate-400">
+            {deducibles?.length ?? 0} de {gastos?.length ?? 0} gastos marcados
+            como deducibles
           </p>
         )}
 
@@ -73,21 +113,61 @@ function Deducciones() {
 
           {!cargando &&
             !error &&
-            (deducibles?.length === 0 ? (
+            (gastos?.length === 0 ? (
               <EstadoVacio
-                mensaje="Sin gastos deducibles todavía"
-                detalle="Marca un gasto como deducible para verlo aquí."
+                mensaje="Sin gastos todavía"
+                detalle="Los gastos que registres podrán marcarse aquí como deducibles."
               />
             ) : (
-              deducibles?.map((movimiento) => (
+              gastos?.map((movimiento) => (
                 <div
                   key={movimiento.id}
-                  className="flex justify-between border-b pb-3 last:border-b-0"
+                  className="flex items-center justify-between gap-4 border-b border-slate-100 pb-3 last:border-b-0"
                 >
-                  <span>{movimiento.concepto}</span>
-                  <span className="font-semibold">
-                    {formatearMoneda(movimiento.monto)}
-                  </span>
+                  <div className="min-w-0">
+                    <p className="truncate font-medium text-slate-900">
+                      {movimiento.concepto}
+                    </p>
+
+                    <p className="text-sm text-slate-400">
+                      {movimiento.categoria} · {formatearFecha(movimiento.fecha)}
+                    </p>
+                  </div>
+
+                  <div className="flex shrink-0 items-center gap-3">
+                    <span className="font-semibold">
+                      {formatearMoneda(movimiento.monto)}
+                    </span>
+
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={movimiento.deducible}
+                      aria-label={`Marcar ${movimiento.concepto} como deducible`}
+                      onClick={() =>
+                        void alternarDeducible(
+                          movimiento.id,
+                          movimiento.deducible,
+                        )
+                      }
+                      disabled={
+                        actualizarMovimiento.isPending || alternandoId !== null
+                      }
+                      className={
+                        movimiento.deducible
+                          ? 'relative h-6 w-11 rounded-full bg-emerald-500 transition disabled:opacity-50'
+                          : 'relative h-6 w-11 rounded-full bg-slate-300 transition hover:bg-slate-400 disabled:opacity-50'
+                      }
+                    >
+                      <span
+                        className={
+                          movimiento.deducible
+                            ? 'absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition'
+                            : 'absolute left-6 top-1 h-4 w-4 rounded-full bg-white transition'
+                        }
+                      />
+                    </button>
+                  </div>
                 </div>
               ))
             ))}
