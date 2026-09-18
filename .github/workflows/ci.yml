@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  frontend:
+    name: Frontend — lint + build + test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend TaxTech
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend TaxTech/package-lock.json
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Tests con cobertura
+        run: npm run test -- --coverage
+
+  backend:
+    name: Backend — build + test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend TaxTech
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend TaxTech/package-lock.json
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Configurar entorno local (SQLite)
+        run: cp .env.example .env
+
+      - name: Generar cliente Prisma
+        run: npx prisma generate
+
+      - name: Crear esquema de la base de datos
+        run: npx prisma migrate deploy
+
+      - name: Build
+        run: npm run build
+
+      - name: Tests
+        run: npm test

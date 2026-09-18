@@ -136,12 +136,12 @@ usable desde un celular.
 
 **Objetivo:** red de seguridad sobre la lógica y la UI.
 
-- [ ] **Unit tests** (Vitest): `utils/tax.ts` (cálculo ISR), formateadores de moneda.
-- [ ] **Component tests** (React Testing Library): render de vistas, flujo de alta de
+- [x] **Unit tests** (Vitest): `utils/tax.ts` (cálculo ISR), formateadores de moneda.
+- [x] **Component tests** (React Testing Library): render de vistas, flujo de alta de
       movimiento, estados de error/vacío.
-- [ ] **Integration tests**: navegación entre rutas con mock de API (MSW).
-- [ ] Configurar CI (GitHub Actions): `lint` + `build` + `test` en cada PR.
-- [ ] Cubre el recálculo: al cambiar un movimiento, resumen e impuestos se actualizan.
+- [x] **Integration tests**: navegación entre rutas con mock de API (MSW).
+- [x] Configurar CI (GitHub Actions): `lint` + `build` + `test` en cada PR.
+- [x] Cubre el recálculo: al cambiar un movimiento, resumen e impuestos se actualizan.
 
 **Criterio de aceptación:** cobertura mínima de 60-70% en lógica pura y smoke tests
 de todas las vistas.
