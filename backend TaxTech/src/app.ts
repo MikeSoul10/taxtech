@@ -1,4 +1,5 @@
 import express from 'express'
+import helmet from 'helmet'
 import cors from 'cors'
 import { errorHandler } from './middlewares/errorHandler'
 import resumenRoutes from './routes/resumen'
@@ -9,6 +10,7 @@ import cfdiRoutes from './routes/cfdi'
 export function crearApp() {
   const app = express()
 
+  app.use(helmet())
   app.use(
     cors({
       origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
