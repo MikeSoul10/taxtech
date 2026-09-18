@@ -8,3 +8,4 @@ incremental, una por fase implementada.
 - [Fase 1 — Base de código, Dashboard maximalista y fix de layout](fase-1.md)
 - [Fase 2 — Backend real y capa de datos del frontend](fase-2.md)
 - [Fase 3 — Funcionalidad completa (gestión)](fase-3.md)
+- [Fase 5 — Testing](fase-5.md)
