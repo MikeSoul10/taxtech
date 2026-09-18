@@ -119,13 +119,13 @@ reproducible y unit-testeado.
 
 ### Fase 4 — Experiencia de usuario, responsive y accesibilidad
 
-- [ ] Sidebar colapsable en móvil (menú hamburguesa) con `aria-expanded`.
-- [ ] Breakpoints sensatos en las grillas (hoy `grid-cols-4` fijo rompe en móvil).
-- [ ] Estados de carga (skeletons), vacíos ("No hay movimientos") y errores con retry.
-- [ ] Accesibilidad: roles y `aria-label` en botones de iconos, focus visible,
+- [x] Sidebar colapsable en móvil (menú hamburguesa) con `aria-expanded`.
+- [x] Breakpoints sensatos en las grillas (hoy `grid-cols-4` fijo rompe en móvil).
+- [x] Estados de carga (skeletons), vacíos ("No hay movimientos") y errores con retry.
+- [x] Accesibilidad: roles y `aria-label` en botones de iconos, focus visible,
       contraste AA, navegación por teclado.
-- [ ] Micro-interacciones: toast/snackbar para confirmaciones de acciones.
-- [ ] Internacionalización básica de fechas y monedas (`es-MX`) centralizada.
+- [x] Micro-interacciones: toast/snackbar para confirmaciones de acciones.
+- [x] Internacionalización básica de fechas y monedas (`es-MX`) centralizada.
 
 **Criterio de aceptación:** auditoría de Lighthouse sin errores críticos, app
 usable desde un celular.
