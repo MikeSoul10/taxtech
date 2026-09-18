@@ -1,6 +1,6 @@
-export const URL_API =
-  (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
-  'http://localhost:4000/api'
+import { URL_API } from '../config/env'
+
+export { URL_API }
 
 export const TIEMPO_ESPERA_MS = 10_000
 

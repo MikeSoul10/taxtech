@@ -39,6 +39,14 @@ describe('GET /api', () => {
     expect(res.body.ok).toBe(true)
   })
 
+  it('envía cabeceras de seguridad', async () => {
+    const res = await request(app).get('/api/estado')
+    expect(res.headers['x-content-type-options']).toBe('nosniff')
+    expect(res.headers['x-frame-options']).toBe('SAMEORIGIN')
+    expect(res.headers['referrer-policy']).toBeDefined()
+    expect(res.headers['x-powered-by']).toBeUndefined()
+  })
+
   it('lista movimientos', async () => {
     const res = await request(app).get('/api/movimientos').expect(200)
     expect(Array.isArray(res.body)).toBe(true)

@@ -150,13 +150,13 @@ de todas las vistas.
 
 ### Fase 6 — Seguridad y datos sensibles
 
-- [ ] No exponer secretos: usar `VITE_*` solo para variables públicas y validar.
-- [ ] Manejo seguro de tokens de sesión (nunca en `localStorage` si aplica;
+- [x] No exponer secretos: usar `VITE_*` solo para variables públicas y validar.
+- [x] Manejo seguro de tokens de sesión (nunca en `localStorage` si aplica;
       preferir cookies `HttpOnly` con backend).
-- [ ] Integración CFDI real: flujo OAuth/autorización documentado, sin exponer
+- [x] Integración CFDI real: flujo OAuth/autorización documentado, sin exponer
       e.firma/contraseña del SAT en el frontend (el backend debe hacer la firma).
-- [ ] Sanitización de datos antes de renderizar (evitar XSS con input de usuario).
-- [ ] Auditoría de dependencias (`npm audit`) regular.
+- [x] Sanitización de datos antes de renderizar (evitar XSS con input de usuario).
+- [x] Auditoría de dependencias (`npm audit`) regular.
 
 **Criterio de aceptación:** revisión de seguridad sin hallazgos críticos.
 
