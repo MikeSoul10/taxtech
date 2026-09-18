@@ -1,3 +1,5 @@
+import { IconoAlerta, IconoReintentar } from '../icons'
+
 interface EstadoErrorProps {
   mensaje?: string
   onReintentar?: () => void
@@ -5,20 +7,34 @@ interface EstadoErrorProps {
 
 function EstadoError({ mensaje, onReintentar }: EstadoErrorProps) {
   return (
-    <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center ring-1 ring-red-100">
-      <p className="text-sm font-semibold text-red-700">
+    <div
+      role="alert"
+      aria-live="assertive"
+      className="flex flex-col items-center justify-center rounded-2xl border border-red-200 bg-red-50/80 p-6 sm:p-8 text-center ring-1 ring-red-200/60"
+    >
+      <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-red-100 text-red-600">
+        <IconoAlerta className="h-6 w-6" />
+      </div>
+
+      <p className="text-base font-bold text-red-900">
         No se pudo cargar la información
       </p>
 
-      {mensaje && <p className="mt-1 text-sm text-red-500">{mensaje}</p>}
+      {mensaje && (
+        <p className="mt-1 max-w-md text-sm text-red-700 font-medium">
+          {mensaje}
+        </p>
+      )}
 
       {onReintentar && (
         <button
           type="button"
           onClick={onReintentar}
-          className="btn-primary mt-4"
+          aria-label="Reintentar cargar la información"
+          className="btn-primary mt-5 inline-flex items-center gap-2"
         >
-          Reintentar
+          <IconoReintentar className="h-4 w-4" />
+          <span>Reintentar</span>
         </button>
       )}
     </div>

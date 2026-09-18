@@ -5,16 +5,37 @@
   --font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Reglas de accesibilidad y navegación por teclado */
+:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @layer components {
   .card {
-    @apply rounded-2xl bg-white p-6 shadow-sm ring-1 ring-black/5;
+    @apply rounded-2xl bg-white p-5 sm:p-6 shadow-sm ring-1 ring-black/5 transition-all;
   }
 
   .btn-primary {
-    @apply rounded-lg bg-slate-900 px-5 py-3 font-medium text-white transition disabled:cursor-not-allowed disabled:opacity-50 hover:bg-slate-800;
+    @apply inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-2.5 sm:py-3 font-medium text-white transition disabled:cursor-not-allowed disabled:opacity-50 hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 active:scale-[0.98];
   }
 
   .btn-accent {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 via-fuchsia-600 to-amber-500 px-5 py-3 font-semibold text-white shadow-lg shadow-fuchsia-500/25 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 via-fuchsia-600 to-amber-500 px-5 py-2.5 sm:py-3 font-semibold text-white shadow-lg shadow-fuchsia-500/25 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 active:scale-[0.98];
   }
 }

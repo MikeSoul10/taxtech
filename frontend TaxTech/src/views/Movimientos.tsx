@@ -15,6 +15,7 @@ import {
   useMovimientos,
 } from '../hooks/useFinanzas'
 import type { Movimiento } from '../types'
+import { IconoIngresos } from '../components/icons'
 
 type ModoModal = 'crear' | 'editar'
 
@@ -122,18 +123,18 @@ function Movimientos() {
     crearMovimiento.isPending || actualizarMovimiento.isPending
 
   return (
-    <div className="p-8">
+<div className="p-4 sm:p-6 lg:p-8">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.3em] text-violet-600">
             Panel financiero
           </p>
 
-          <h2 className="mt-1 bg-gradient-to-r from-violet-700 via-fuchsia-600 to-amber-500 bg-clip-text text-3xl font-black tracking-tight text-transparent">
+          <h1 className="mt-1 bg-gradient-to-r from-violet-700 via-fuchsia-600 to-amber-500 bg-clip-text text-3xl font-black tracking-tight text-transparent sm:text-4xl">
             Movimientos
-          </h2>
+          </h1>
 
-          <p className="mt-1 text-slate-500">
+          <p className="mt-1 text-sm text-slate-600">
             Registra, edita y elimina tus ingresos y gastos.
           </p>
         </div>
@@ -141,7 +142,7 @@ function Movimientos() {
         <button
           type="button"
           onClick={() => setModal({ modo: 'crear' })}
-          className="btn-accent"
+          className="btn-accent self-start sm:self-auto"
         >
           + Nuevo movimiento
         </button>
@@ -153,7 +154,7 @@ function Movimientos() {
         </div>
       )}
 
-      <div className="card mt-8">
+      <div className="card mt-6 sm:mt-8">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <input
             className={claseFiltro}
@@ -209,14 +210,25 @@ function Movimientos() {
 
         <div className="mt-6 space-y-4">
           {movimientos.isLoading && (
-            <div className="space-y-4">
-              {[0, 1, 2].map((item) => (
+            <div
+              role="status"
+              aria-busy="true"
+              aria-label="Cargando movimientos..."
+              className="space-y-4"
+            >
+              <span className="sr-only">Cargando movimientos...</span>
+              {[0, 1, 2, 3].map((item) => (
                 <div
                   key={item}
-                  className="h-12 animate-pulse rounded-xl bg-slate-200"
-                />
+                  className="flex items-center justify-between gap-4 border-b border-slate-100 pb-4 last:border-b-0"
+                >
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4.5 w-3/5 animate-pulse rounded-lg bg-slate-200/80" />
+                    <div className="h-3.5 w-2/5 animate-pulse rounded-md bg-slate-100" />
+                  </div>
+                  <div className="h-5 w-24 animate-pulse rounded-lg bg-slate-200/80" />
+                </div>
               ))}
-              <p className="text-slate-500">Cargando movimientos...</p>
             </div>
           )}
 
@@ -231,6 +243,7 @@ function Movimientos() {
             !movimientos.isError &&
             (filtrados.length === 0 ? (
               <EstadoVacio
+icono={<IconoIngresos className="h-6 w-6" />}
                 mensaje={
                   datos.length === 0
                     ? 'Sin movimientos todavía'
@@ -240,23 +253,25 @@ function Movimientos() {
               />
             ) : (
               filtrados.map((movimiento) => (
-                <div
+                <article
                   key={movimiento.id}
-                  className="flex flex-col gap-3 border-b border-slate-100 pb-4 last:border-b-0 sm:flex-row sm:items-center sm:justify-between"
+                  className="flex flex-col gap-3 border-b border-slate-100 py-3.5 first:pt-0 last:border-b-0 sm:flex-row sm:items-center sm:justify-between"
                 >
-                  <div className="min-w-0">
-                    <p className="truncate font-medium text-slate-900">
-                      {movimiento.concepto}
-                    </p>
-
-                    <p className="text-sm text-slate-400">
-                      {movimiento.tipo} · {movimiento.categoria} ·{' '}
-                      {formatearFecha(movimiento.fecha)}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="font-semibold text-slate-900 text-sm sm:text-base">
+                        {movimiento.concepto}
+                      </p>
                       {movimiento.deducible && (
-                        <span className="ml-2 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">
+                        <span className="inline-flex items-center rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700 ring-1 ring-emerald-600/20">
                           Deducible
                         </span>
                       )}
+                    </div>
+
+                    <p className="mt-0.5 text-xs text-slate-500 sm:text-sm">
+                      <span className="font-medium text-slate-600">{movimiento.tipo}</span> ·{' '}
+                      {movimiento.categoria} · {formatearFecha(movimiento.fecha)}
                     </p>
                   </div>
 
@@ -293,7 +308,7 @@ function Movimientos() {
                       </button>
                     </div>
                   </div>
-                </div>
+                </article>
               ))
             ))}
         </div>

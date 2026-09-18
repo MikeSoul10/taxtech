@@ -5,6 +5,8 @@ interface IconoProps {
 export function IconoIngresos({ className = 'h-6 w-6' }: IconoProps) {
   return (
     <svg
+      aria-hidden="true"
+      focusable="false"
       className={className}
       viewBox="0 0 24 24"
       fill="none"
@@ -23,6 +25,8 @@ export function IconoIngresos({ className = 'h-6 w-6' }: IconoProps) {
 export function IconoGastos({ className = 'h-6 w-6' }: IconoProps) {
   return (
     <svg
+      aria-hidden="true"
+      focusable="false"
       className={className}
       viewBox="0 0 24 24"
       fill="none"
@@ -41,6 +45,8 @@ export function IconoGastos({ className = 'h-6 w-6' }: IconoProps) {
 export function IconoDeducibles({ className = 'h-6 w-6' }: IconoProps) {
   return (
     <svg
+      aria-hidden="true"
+      focusable="false"
       className={className}
       viewBox="0 0 24 24"
       fill="none"
@@ -58,6 +64,8 @@ export function IconoDeducibles({ className = 'h-6 w-6' }: IconoProps) {
 export function IconoImpuesto({ className = 'h-6 w-6' }: IconoProps) {
   return (
     <svg
+      aria-hidden="true"
+      focusable="false"
       className={className}
       viewBox="0 0 24 24"
       fill="none"
@@ -76,6 +84,8 @@ export function IconoImpuesto({ className = 'h-6 w-6' }: IconoProps) {
 export function IconoFlechaEsquina({ className = 'h-5 w-5' }: IconoProps) {
   return (
     <svg
+      aria-hidden="true"
+      focusable="false"
       className={className}
       viewBox="0 0 24 24"
       fill="none"
@@ -92,6 +102,8 @@ export function IconoFlechaEsquina({ className = 'h-5 w-5' }: IconoProps) {
 export function IconoFlecha({ className = 'h-5 w-5' }: IconoProps) {
   return (
     <svg
+      aria-hidden="true"
+      focusable="false"
       className={className}
       viewBox="0 0 24 24"
       fill="none"
@@ -108,6 +120,8 @@ export function IconoFlecha({ className = 'h-5 w-5' }: IconoProps) {
 export function IconoVistaPrevia({ className = 'h-5 w-5' }: IconoProps) {
   return (
     <svg
+      aria-hidden="true"
+      focusable="false"
       className={className}
       viewBox="0 0 24 24"
       fill="none"
@@ -125,6 +139,8 @@ export function IconoVistaPrevia({ className = 'h-5 w-5' }: IconoProps) {
 export function IconoBanca({ className = 'h-6 w-6' }: IconoProps) {
   return (
     <svg
+      aria-hidden="true"
+      focusable="false"
       className={className}
       viewBox="0 0 24 24"
       fill="none"
@@ -138,6 +154,102 @@ export function IconoBanca({ className = 'h-6 w-6' }: IconoProps) {
       <path d="M19 21V10" />
       <path d="M2 6l10-4 10 4" />
       <path d="M8 21v-7M12 21v-7M16 21v-7" />
+    </svg>
+  )
+}
+
+export function IconoHamburguesa({ className = 'h-6 w-6' }: IconoProps) {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <line x1="3" y1="18" x2="21" y2="18" />
+    </svg>
+  )
+}
+
+export function IconoCerrar({ className = 'h-6 w-6' }: IconoProps) {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  )
+}
+
+export function IconoReintentar({ className = 'h-4 w-4' }: IconoProps) {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M1 4v6h6" />
+      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+    </svg>
+  )
+}
+
+export function IconoCheck({ className = 'h-5 w-5' }: IconoProps) {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  )
+}
+
+export function IconoAlerta({ className = 'h-5 w-5' }: IconoProps) {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
     </svg>
   )
 }
