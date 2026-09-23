@@ -5,7 +5,7 @@ import EstadoError from '../components/feedback/EstadoError'
 import EstadoVacio from '../components/feedback/EstadoVacio'
 import GraficoIngresosGastos from '../components/GraficoIngresosGastos'
 import type { LayoutContextType } from '../components/Layout'
-import { sincronizarCFDI } from '../api/taxtechApi'
+import { ModalPortalSat } from '../components/ModalPortalSat'
 import { mensajeDeError } from '../api/client'
 import { formatearMoneda } from '../utils/format'
 import {
@@ -25,7 +25,7 @@ import {
 const arrayCuatro = [0, 1, 2, 3]
 
 function Dashboard() {
-  const [sincronizando, setSincronizando] = useState(false)
+  const [modalSatAbierto, setModalSatAbierto] = useState(false)
   const { notificar } = useOutletContext<LayoutContextType>()
 
   const resumen = useResumenFinanciero()
@@ -39,22 +39,6 @@ function Dashboard() {
     datos && datos.impuestoEstimado > 0
       ? Math.min(100, Math.round((datos.reservaFiscal / datos.impuestoEstimado) * 100))
       : 0
-
-  async function manejarSincronizacion() {
-    setSincronizando(true)
-
-    try {
-      const resultado = await sincronizarCFDI()
-      notificar(
-        `Sincronización exitosa: ${resultado.comprobantesEncontrados} comprobantes CFDI encontrados.`,
-        'exito'
-      )
-    } catch {
-      notificar('Error al sincronizar con el SAT. Por favor intenta de nuevo.', 'error')
-    } finally {
-      setSincronizando(false)
-    }
-  }
 
   return (
     <div className="relative min-h-full overflow-hidden">
@@ -85,14 +69,12 @@ function Dashboard() {
 
           <button
             type="button"
-            onClick={manejarSincronizacion}
-            disabled={sincronizando}
-            aria-busy={sincronizando}
-            aria-label={sincronizando ? 'Sincronizando comprobantes...' : 'Sincronizar comprobantes CFDI'}
+            onClick={() => setModalSatAbierto(true)}
+            aria-label="Abrir simulador del Portal del SAT"
             className="btn-accent self-start sm:self-auto"
           >
             <IconoVistaPrevia className="h-5 w-5" />
-            <span>{sincronizando ? 'Sincronizando...' : 'Sincronizar CFDI'}</span>
+            <span>Sincronizar CFDI (SAT)</span>
           </button>
         </header>
 
@@ -359,6 +341,12 @@ function Dashboard() {
           </>
         )}
       </div>
+
+      <ModalPortalSat
+        abierto={modalSatAbierto}
+        onCerrar={() => setModalSatAbierto(false)}
+        onNotificar={notificar}
+      />
     </div>
   )
 }

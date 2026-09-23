@@ -10,6 +10,7 @@ import {
   topeDeducciones,
 } from '../utils/tax'
 import {
+  useReiniciarReservaImpuestos,
   useReservarImpuestos,
   useResumenFinanciero,
 } from '../hooks/useFinanzas'
@@ -24,12 +25,28 @@ function redondearCentavos(valor: number): number {
 function Impuestos() {
   const resumen = useResumenFinanciero()
   const reservar = useReservarImpuestos()
+  const reiniciarReserva = useReiniciarReservaImpuestos()
   const datos = resumen.data
 
   const [porcentaje, setPorcentaje] = useState(20)
   const [aviso, setAviso] = useState<{ tono: 'exito' | 'error'; mensaje: string } | null>(
     null,
   )
+
+  async function manejarReiniciarReserva() {
+    const confirmado = window.confirm(
+      '¿Estás seguro de que deseas reiniciar tu reserva fiscal a $0.00? Esta acción borrará el acumulado apartado.',
+    )
+    if (!confirmado) return
+
+    setAviso(null)
+    try {
+      await reiniciarReserva.mutateAsync()
+      setAviso({ tono: 'exito', mensaje: 'Reserva fiscal reiniciada a $0.00.' })
+    } catch (error) {
+      setAviso({ tono: 'error', mensaje: mensajeDeError(error) })
+    }
+  }
 
   const cobertura =
     datos && datos.impuestoEstimado > 0
@@ -188,6 +205,17 @@ function Impuestos() {
                     style={{ width: `${cobertura}%` }}
                   />
                 </div>
+
+                <div className="mt-4 border-t border-slate-100 pt-3 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => void manejarReiniciarReserva()}
+                    disabled={reiniciarReserva.isPending || !datos?.reservaFiscal}
+                    className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-1 text-xs font-bold text-rose-700 transition hover:bg-rose-100 disabled:opacity-50"
+                  >
+                    🔄 Reiniciar reserva a $0
+                  </button>
+                </div>
               </article>
             </>
           )}
@@ -287,16 +315,27 @@ function Impuestos() {
                 </span>
               </p>
 
-              <button
-                type="button"
-                onClick={() => void manejarReservar()}
-                disabled={reservar.isPending || cantidadReservar <= 0}
-                className="btn-primary"
-              >
-                {reservar.isPending
-                  ? 'Reservando...'
-                  : `Reservar ${porcentaje}% de ingresos`}
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => void manejarReiniciarReserva()}
+                  disabled={reiniciarReserva.isPending || !datos?.reservaFiscal}
+                  className="rounded-xl border border-rose-300 bg-rose-50 px-4 py-2.5 text-xs font-bold text-rose-800 transition hover:bg-rose-100 disabled:opacity-50"
+                >
+                  🔄 Reiniciar reserva
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => void manejarReservar()}
+                  disabled={reservar.isPending || cantidadReservar <= 0}
+                  className="btn-primary"
+                >
+                  {reservar.isPending
+                    ? 'Reservando...'
+                    : `Reservar ${porcentaje}% de ingresos`}
+                </button>
+              </div>
             </div>
           </div>
         )}

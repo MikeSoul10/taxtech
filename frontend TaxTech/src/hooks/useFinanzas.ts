@@ -3,11 +3,14 @@ import {
   actualizarMovimiento,
   crearMovimiento,
   eliminarMovimiento,
+  eliminarMovimientosMasivo,
+  importarCFDISat,
   obtenerMovimientos,
   obtenerResumenFinanciero,
+  reiniciarReservaImpuestos,
   reservarImpuestos,
 } from '../api/taxtechApi'
-import type { Movimiento } from '../types'
+import type { ComprobanteCFDI, Movimiento } from '../types'
 
 export const clavesConsulta = {
   resumen: ['resumen'] as const,
@@ -72,11 +75,38 @@ export function useEliminarMovimiento() {
   })
 }
 
+export function useEliminarMovimientosMasivo() {
+  const invalidar = useInvalidarFinanzas()
+
+  return useMutation({
+    mutationFn: (tipo?: 'todos' | 'Ingreso' | 'Gasto') => eliminarMovimientosMasivo(tipo),
+    onSuccess: invalidar,
+  })
+}
+
+export function useImportarCFDI() {
+  const invalidar = useInvalidarFinanzas()
+
+  return useMutation({
+    mutationFn: (comprobantes: ComprobanteCFDI[]) => importarCFDISat(comprobantes),
+    onSuccess: invalidar,
+  })
+}
+
 export function useReservarImpuestos() {
   const invalidar = useInvalidarFinanzas()
 
   return useMutation({
     mutationFn: reservarImpuestos,
+    onSuccess: invalidar,
+  })
+}
+
+export function useReiniciarReservaImpuestos() {
+  const invalidar = useInvalidarFinanzas()
+
+  return useMutation({
+    mutationFn: reiniciarReservaImpuestos,
     onSuccess: invalidar,
   })
 }

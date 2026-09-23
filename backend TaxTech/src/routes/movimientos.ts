@@ -7,6 +7,7 @@ import {
   actualizarMovimiento,
   crearMovimiento,
   eliminarMovimiento,
+  eliminarMovimientosMasivo,
   listarMovimientos,
 } from '../services/movimientosService'
 
@@ -19,6 +20,12 @@ router.get('/', async (_req, res) => {
 router.post('/', async (req, res) => {
   const datos = crearMovimientoSchema.parse(req.body)
   res.status(201).json(await crearMovimiento(datos))
+})
+
+router.delete('/', async (req, res) => {
+  const tipo = req.query.tipo as 'todos' | 'Ingreso' | 'Gasto' | undefined
+  const resultado = await eliminarMovimientosMasivo(tipo)
+  res.json({ ok: true, ...resultado })
 })
 
 router.patch('/:id', async (req, res) => {

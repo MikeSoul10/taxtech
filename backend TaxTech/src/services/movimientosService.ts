@@ -86,3 +86,22 @@ export async function eliminarMovimiento(id: string): Promise<boolean> {
   await prisma.movimiento.delete({ where: { id } })
   return true
 }
+
+export async function crearMovimientosMasivos(
+  entradas: MovimientoEntrada[],
+): Promise<Movimiento[]> {
+  const creados: Movimiento[] = []
+  for (const datos of entradas) {
+    const mov = await crearMovimiento(datos)
+    creados.push(mov)
+  }
+  return creados
+}
+
+export async function eliminarMovimientosMasivo(
+  filtro?: 'todos' | 'Ingreso' | 'Gasto',
+): Promise<{ cantidadEliminados: number }> {
+  const where = filtro && filtro !== 'todos' ? { tipo: filtro } : {}
+  const resultado = await prisma.movimiento.deleteMany({ where })
+  return { cantidadEliminados: resultado.count }
+}

@@ -12,6 +12,7 @@ import {
   useActualizarMovimiento,
   useCrearMovimiento,
   useEliminarMovimiento,
+  useEliminarMovimientosMasivo,
   useMovimientos,
 } from '../hooks/useFinanzas'
 import type { Movimiento } from '../types'
@@ -27,6 +28,7 @@ function Movimientos() {
   const crearMovimiento = useCrearMovimiento()
   const actualizarMovimiento = useActualizarMovimiento()
   const eliminarMovimiento = useEliminarMovimiento()
+  const eliminarMasivo = useEliminarMovimientosMasivo()
 
   const [busqueda, setBusqueda] = useState('')
   const [tipoFiltro, setTipoFiltro] = useState<'Todos' | 'Ingreso' | 'Gasto'>(
@@ -119,11 +121,36 @@ function Movimientos() {
     }
   }
 
+  async function manejarEliminarMasivo(tipo: 'todos' | 'Gasto' | 'Ingreso') {
+    const textoTipo =
+      tipo === 'todos'
+        ? 'TODOS los movimientos'
+        : tipo === 'Gasto'
+          ? 'todos los GASTOS'
+          : 'todos los INGRESOS'
+
+    const confirmado = window.confirm(
+      `¿Estás seguro de que deseas eliminar ${textoTipo}? Esta acción borrará los registros permanentemente de tu base de datos.`,
+    )
+
+    if (!confirmado) return
+
+    try {
+      const res = await eliminarMasivo.mutateAsync(tipo)
+      setAviso({
+        tono: 'exito',
+        mensaje: `Se eliminaron correctamente ${res.cantidadEliminados} movimiento(s).`,
+      })
+    } catch (error) {
+      setAviso({ tono: 'error', mensaje: mensajeDeError(error) })
+    }
+  }
+
   const guardando =
     crearMovimiento.isPending || actualizarMovimiento.isPending
 
   return (
-<div className="p-4 sm:p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.3em] text-violet-600">
@@ -139,13 +166,42 @@ function Movimientos() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setModal({ modo: 'crear' })}
-          className="btn-accent self-start sm:self-auto"
-        >
-          + Nuevo movimiento
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setModal({ modo: 'crear' })}
+            className="btn-accent"
+          >
+            + Nuevo movimiento
+          </button>
+
+          <button
+            type="button"
+            onClick={() => manejarEliminarMasivo('Ingreso')}
+            disabled={eliminarMasivo.isPending}
+            className="rounded-xl border border-emerald-300 bg-emerald-50/60 px-3 py-2 text-xs font-bold text-emerald-800 transition hover:bg-emerald-100 disabled:opacity-50"
+          >
+            🗑️ Eliminar ingresos
+          </button>
+
+          <button
+            type="button"
+            onClick={() => manejarEliminarMasivo('Gasto')}
+            disabled={eliminarMasivo.isPending}
+            className="rounded-xl border border-rose-300 bg-rose-50/60 px-3 py-2 text-xs font-bold text-rose-800 transition hover:bg-rose-100 disabled:opacity-50"
+          >
+            🗑️ Eliminar gastos
+          </button>
+
+          <button
+            type="button"
+            onClick={() => manejarEliminarMasivo('todos')}
+            disabled={eliminarMasivo.isPending}
+            className="rounded-xl bg-rose-600 px-3 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-rose-700 disabled:opacity-50"
+          >
+            ⚠️ Eliminar todo
+          </button>
+        </div>
       </div>
 
       {aviso && (

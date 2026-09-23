@@ -1,5 +1,7 @@
 import type {
+  ComprobanteCFDI,
   Movimiento,
+  ResultadoImportacionCFDI,
   ResultadoReserva,
   ResultadoSincronizacion,
   ResumenFinanciero,
@@ -42,10 +44,44 @@ export async function eliminarMovimiento(id: string): Promise<void> {
   })
 }
 
+export async function eliminarMovimientosMasivo(
+  tipo?: 'todos' | 'Ingreso' | 'Gasto',
+): Promise<{ ok: boolean; cantidadEliminados: number }> {
+  const query = tipo ? `?tipo=${tipo}` : ''
+  return peticion<{ ok: boolean; cantidadEliminados: number }>(`/movimientos${query}`, {
+    method: 'DELETE',
+    reintentos: 0,
+  })
+}
+
 export async function sincronizarCFDI(): Promise<ResultadoSincronizacion> {
   return peticion<ResultadoSincronizacion>('/cfdi/sincronizar', {
     method: 'POST',
     reintentos: 0,
+  })
+}
+
+export async function consultarCFDISat(params: {
+  tipo?: string
+  rfc?: string
+}): Promise<{ ok: boolean; totalEncontrados: number; comprobantes: ComprobanteCFDI[] }> {
+  return peticion<{ ok: boolean; totalEncontrados: number; comprobantes: ComprobanteCFDI[] }>(
+    '/cfdi/consultar',
+    {
+      method: 'POST',
+      reintentos: 0,
+      body: JSON.stringify(params),
+    },
+  )
+}
+
+export async function importarCFDISat(
+  comprobantes: ComprobanteCFDI[],
+): Promise<ResultadoImportacionCFDI> {
+  return peticion<ResultadoImportacionCFDI>('/cfdi/importar', {
+    method: 'POST',
+    reintentos: 0,
+    body: JSON.stringify({ comprobantes }),
   })
 }
 
@@ -56,5 +92,12 @@ export async function reservarImpuestos(
     method: 'POST',
     reintentos: 0,
     body: JSON.stringify({ cantidad }),
+  })
+}
+
+export async function reiniciarReservaImpuestos(): Promise<ResultadoReserva> {
+  return peticion<ResultadoReserva>('/impuestos/reiniciar', {
+    method: 'POST',
+    reintentos: 0,
   })
 }

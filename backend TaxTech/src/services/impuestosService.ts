@@ -13,3 +13,11 @@ export async function reservarImpuestos(
     cantidadReservada: reserva.cantidad,
   }
 }
+
+export async function reiniciarReservaFiscal(): Promise<ResultadoReserva> {
+  await prisma.reservaFiscal.deleteMany({})
+  return {
+    ok: true,
+    cantidadReservada: 0,
+  }
+}

@@ -23,6 +23,34 @@ export interface ResultadoSincronizacion {
   mensaje: string
 }
 
+export interface ComprobanteCFDI {
+  uuid: string
+  rfcEmisor: string
+  nombreEmisor: string
+  rfcReceptor: string
+  nombreReceptor: string
+  concepto: string
+  tipo: TipoMovimiento
+  subtotal: number
+  iva: number
+  total: number
+  fecha: string
+  categoria: string
+  deducible: boolean
+  estado: 'Vigente' | 'Cancelado'
+}
+
+export interface SolicitudImportacionCFDI {
+  comprobantes: ComprobanteCFDI[]
+}
+
+export interface ResultadoImportacionCFDI {
+  ok: boolean
+  importados: number
+  mensaje: string
+  movimientos: Movimiento[]
+}
+
 export interface ResultadoReserva {
   ok: boolean
   cantidadReservada: number
